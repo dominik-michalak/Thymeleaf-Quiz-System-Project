@@ -12,7 +12,7 @@
 	<artifactId>quiz-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quiz-app</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Quiz Web App</description>
 	<url/>
 	<licenses>
 		<license/>
