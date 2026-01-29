@@ -13,7 +13,7 @@ public class QuizEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @NotBlank(message = "Title is required")
     @Column (nullable = false, length = 200)
@@ -22,16 +22,19 @@ public class QuizEntity {
     @Column(length = 500)
     private String description;
 
+    @Column(length = 100)
+    private String category;
+
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<>();
 
-    public QuizEntity(String title, String description) {}
+    public QuizEntity() {}
 
-    public QuizEntity(String id, String title, String description, List<QuestionEntity> questions) {
+    public QuizEntity(Long id, String title, String description, List<QuestionEntity> questions) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.questions = questions;
+        this.questions = questions != null ? questions : new ArrayList<>();
     }
 
     public void addQuestion(QuestionEntity question) {
@@ -48,11 +51,11 @@ public class QuizEntity {
         return questions.stream().mapToInt(QuestionEntity::getScore).sum();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -70,6 +73,14 @@ public class QuizEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public List<QuestionEntity> getQuestions() {

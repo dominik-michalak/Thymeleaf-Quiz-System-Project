@@ -9,12 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QuizRepository extends JpaRepository<QuizEntity, Integer> {
+public interface QuizRepository extends JpaRepository<QuizEntity, Long> {
     Optional<QuizEntity> findByTitle(String title);
-    List<QuizEntity> findByTitleContaining(String category);
+    List<QuizEntity> findByTitleContaining(String keyword);
     List<QuizEntity> findByCategory(String category);
-
-    Optional<QuizEntity> findById(String id);
-
-    void deleteById(String id);
 }

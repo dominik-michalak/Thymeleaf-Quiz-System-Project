@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .quiz-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .category-badge {
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <strong>Quiz App</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/quizzes}">All Quizzes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/quiz/create}">Create Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/categories}">Categories</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 mb-4">Welcome to Quiz App</h1>
+            <p class="lead mb-4">Test your knowledge, create quizzes, and challenge yourself!</p>
+            <a th:href="@{/quizzes}" class="btn btn-light btn-lg me-2">Browse Quizzes</a>
+            <a th:href="@{/quiz/create}" class="btn btn-outline-light btn-lg">Create a Quiz</a>
+        </div>
+    </section>
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-md-4">
+                    <h2 class="text-primary" th:text="${quizCount}">0</h2>
+                    <p class="text-muted">Available Quizzes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Featured Quizzes</h2>
+
+            <div th:if="${#lists.isEmpty(quizzes)}" class="text-center py-5">
+                <p class="text-muted">No quizzes available yet.</p>
+                <a th:href="@{/quiz/create}" class="btn btn-primary">Create the first quiz!</a>
+            </div>
+
+            <div class="row" th:unless="${#lists.isEmpty(quizzes)}">
+                <div class="col-md-4 mb-4" th:each="quiz : ${quizzes}">
+                    <div class="card quiz-card h-100">
+                        <div class="card-body">
+                            <span class="badge bg-secondary category-badge mb-2"
+                                  th:text="${quiz.category != null ? quiz.category : 'General'}">Category</span>
+                            <h5 class="card-title" th:text="${quiz.title}">Quiz Title</h5>
+                            <p class="card-text text-muted" th:text="${quiz.description != null ? quiz.description : 'No description'}">Description</p>
+                            <p class="small text-muted">
+                                <span th:text="${#lists.size(quiz.questions)}">0</span> questions
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <a th:href="@{/quiz/{id}/take(id=${quiz.id})}" class="btn btn-primary btn-sm me-1">Take Quiz</a>
+                            <a th:href="@{/quiz/{id}(id=${quiz.id})}" class="btn btn-outline-secondary btn-sm me-1">View</a>
+                            <a th:href="@{/quiz/{id}/edit(id=${quiz.id})}" class="btn btn-outline-warning btn-sm">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

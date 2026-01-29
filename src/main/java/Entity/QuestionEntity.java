@@ -1,15 +1,19 @@
 package Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "questions")
 public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @NotBlank
     @Column(nullable = false, length = 1000)
@@ -40,9 +44,20 @@ public class QuestionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
+    @JsonIgnore
     private QuizEntity quiz;
-    public QuestionEntity(String id, String questionText, String correctAnswer, Integer score, String category, String optionA, String optionB, String optionC, String optionD) {
-        this.id = id;
+
+    public QuestionEntity() {}
+
+    public QuestionEntity(String questionText, String correctAnswer, Integer score, String category) {
+        this.questionText = questionText;
+        this.correctAnswer = correctAnswer;
+        this.score = score;
+        this.category = category;
+    }
+
+    public QuestionEntity(String questionText, String correctAnswer, Integer score, String category,
+                          String optionA, String optionB, String optionC, String optionD) {
         this.questionText = questionText;
         this.correctAnswer = correctAnswer;
         this.score = score;
@@ -52,15 +67,12 @@ public class QuestionEntity {
         this.optionC = optionC;
         this.optionD = optionD;
     }
-    public QuestionEntity() {}
 
-
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -152,4 +164,34 @@ public class QuestionEntity {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        QuestionEntity that = (QuestionEntity) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    public boolean isCorrectAnswer(String userAnswer) {
+        if (userAnswer == null || correctAnswer == null) {
+            return false;
+        }
+        return correctAnswer.equalsIgnoreCase(userAnswer.trim());
+    }
+
+    public List<String> getAllOptions() {
+        List<String> options = new ArrayList<>();
+        if (optionA != null) options.add(optionA);
+        if (optionB != null) options.add(optionB);
+        if (optionC != null) options.add(optionC);
+        if (optionD != null) options.add(optionD);
+        return options;
+    }
 }

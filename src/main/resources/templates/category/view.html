@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${category + ' - Quiz App'}">Category</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}"><strong>Quiz App</strong></a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/quizzes}">All Quizzes</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/categories}">Categories</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/categories}">Categories</a></li>
+                <li class="breadcrumb-item active" th:text="${category}">Category</li>
+            </ol>
+        </nav>
+        <h1 class="mb-4">
+            Category: <span class="badge bg-primary" th:text="${category}">Category</span>
+        </h1>
+        <div th:if="${#lists.isEmpty(questions)}" class="text-center py-5">
+            <p class="text-muted">No questions in this category.</p>
+        </div>
+        <div class="list-group" th:unless="${#lists.isEmpty(questions)}">
+            <div class="list-group-item" th:each="question, stat : ${questions}">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="mb-1">
+                            <span class="badge bg-secondary me-2" th:text="${stat.count}">1</span>
+                            <span th:text="${question.questionText}">Question text</span>
+                        </h6>
+                        <small class="text-muted">Score: <span th:text="${question.score}">10</span> points</small>
+                    </div>
+                    <span class="badge bg-success" th:text="'Answer: ' + ${question.correctAnswer}">Answer</span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a th:href="@{/categories}" class="btn btn-outline-secondary">Back to Categories</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

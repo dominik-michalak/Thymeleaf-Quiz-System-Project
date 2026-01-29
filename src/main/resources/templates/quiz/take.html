@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${quiz.title + ' - Take Quiz'}">Take Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .question-card {
+            border-left: 4px solid #0d6efd;
+        }
+        .option-label {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-label:hover {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+        input[type="radio"]:checked + .option-label {
+            border-color: #0d6efd;
+            background-color: #e7f1ff;
+        }
+        .progress-section {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+            padding: 15px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}"><strong>Quiz App</strong></a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="progress-section mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 th:text="${quiz.title}">Quiz Title</h2>
+                <span class="badge bg-primary fs-6" th:text="${#lists.size(questions) + ' Questions'}">0 Questions</span>
+            </div>
+            <p class="text-muted mb-0" th:text="${quiz.description}">Description</p>
+        </div>
+
+        <form th:action="@{/quiz/{id}/submit(id=${quiz.id})}" method="post">
+            <div th:if="${#lists.isEmpty(questions)}" class="alert alert-warning text-center py-5">
+                <h4>No questions available</h4>
+                <p>This quiz doesn't have any questions yet.</p>
+                <a th:href="@{/quizzes}" class="btn btn-primary">Back to Quizzes</a>
+            </div>
+            <div th:unless="${#lists.isEmpty(questions)}">
+                <div class="card question-card mb-4" th:each="question, stat : ${questions}">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>
+                                <strong>Question <span th:text="${stat.count}">1</span></strong>
+                                <span class="text-muted ms-2" th:text="${question.category}">Category</span>
+                            </span>
+                            <span class="badge bg-success" th:text="${question.score + ' points'}">10 points</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-4" th:text="${question.questionText}">Question text here?</h5>
+
+                        <div class="options">
+                            <div th:if="${question.optionA != null}">
+                                <input type="radio"
+                                       th:name="'answer_' + ${question.id}"
+                                       th:id="'q' + ${question.id} + '_a'"
+                                       value="A"
+                                       class="d-none">
+                                <label th:for="'q' + ${question.id} + '_a'" class="option-label">
+                                    <strong class="me-2">A.</strong>
+                                    <span th:text="${question.optionA}">Option A</span>
+                                </label>
+                            </div>
+                            <div th:if="${question.optionB != null}">
+                                <input type="radio"
+                                       th:name="'answer_' + ${question.id}"
+                                       th:id="'q' + ${question.id} + '_b'"
+                                       value="B"
+                                       class="d-none">
+                                <label th:for="'q' + ${question.id} + '_b'" class="option-label">
+                                    <strong class="me-2">B.</strong>
+                                    <span th:text="${question.optionB}">Option B</span>
+                                </label>
+                            </div>
+                            <div th:if="${question.optionC != null}">
+                                <input type="radio"
+                                       th:name="'answer_' + ${question.id}"
+                                       th:id="'q' + ${question.id} + '_c'"
+                                       value="C"
+                                       class="d-none">
+                                <label th:for="'q' + ${question.id} + '_c'" class="option-label">
+                                    <strong class="me-2">C.</strong>
+                                    <span th:text="${question.optionC}">Option C</span>
+                                </label>
+                            </div>
+                            <div th:if="${question.optionD != null}">
+                                <input type="radio"
+                                       th:name="'answer_' + ${question.id}"
+                                       th:id="'q' + ${question.id} + '_d'"
+                                       value="D"
+                                       class="d-none">
+                                <label th:for="'q' + ${question.id} + '_d'" class="option-label">
+                                    <strong class="me-2">D.</strong>
+                                    <span th:text="${question.optionD}">Option D</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mb-5">
+                    <button type="submit" class="btn btn-primary btn-lg">Submit Quiz</button>
+                    <a th:href="@{/quizzes}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
