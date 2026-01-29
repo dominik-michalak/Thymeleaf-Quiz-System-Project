@@ -1,6 +1,5 @@
 package Entity;
 
-import Entity.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,9 +41,6 @@ public class QuestionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
     private QuizEntity quiz;
-
-    public QuestionEntity() {}
-
     public QuestionEntity(String id, String questionText, String correctAnswer, Integer score, String category, String optionA, String optionB, String optionC, String optionD) {
         this.id = id;
         this.questionText = questionText;
@@ -56,6 +52,9 @@ public class QuestionEntity {
         this.optionC = optionC;
         this.optionD = optionD;
     }
+    public QuestionEntity() {}
+
+
 
     public String getId() {
         return id;

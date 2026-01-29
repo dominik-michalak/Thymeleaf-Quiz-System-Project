@@ -13,4 +13,8 @@ public interface QuizRepository extends JpaRepository<QuizEntity, Integer> {
     Optional<QuizEntity> findByTitle(String title);
     List<QuizEntity> findByTitleContaining(String category);
     List<QuizEntity> findByCategory(String category);
+
+    Optional<QuizEntity> findById(String id);
+
+    void deleteById(String id);
 }

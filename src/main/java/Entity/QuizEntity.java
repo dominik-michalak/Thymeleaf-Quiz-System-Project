@@ -25,7 +25,7 @@ public class QuizEntity {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<>();
 
-    public QuizEntity() {}
+    public QuizEntity(String title, String description) {}
 
     public QuizEntity(String id, String title, String description, List<QuestionEntity> questions) {
         this.id = id;
